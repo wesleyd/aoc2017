@@ -16,4 +16,4 @@ assert captcha('91212129') == 9
 with open('inputs/day01.input.txt') as f:
     real_input = f.read().strip()
 
-print(captcha(real_input))
+print(captcha(real_input)) # => 1102
