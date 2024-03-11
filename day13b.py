@@ -2,7 +2,7 @@
 
 import re
 
-from collections import namedtuple
+from collections import defaultdict,namedtuple
 
 example_input = """
 0: 3
@@ -17,7 +17,9 @@ def numbers(line):
     return [int(x) for x in re.findall(r'\d+', line)]
 
 def parse(inp):
-    return [Scanner(*numbers(line)) for line in inp.strip().splitlines()]
+    scanners = [Scanner(*numbers(line)) for line in inp.strip().splitlines()]
+    scanners.sort(key=lambda sc: sc.depth)
+    return scanners
 
 def caught(scanners, n):
     severity = 0
@@ -40,5 +42,12 @@ assert (got := run(example_input)) == 10, got
 
 with open('inputs/day13.input.txt') as f:
     real_input = f.read()
+
+#dd = defaultdict(set)
+#for scanner in parse(real_input):
+#    mod = 2*scanner.depth-1
+#    #print(scanner, mod)
+#    dd[mod].add(scanner.layer % mod)
+#print(sorted(dd.keys()))
 
 print(run(real_input))  # => 3878062
