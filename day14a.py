@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from collections import deque
-
 def knot_hash(s, n=256):
     numbers = [ord(c) for c in s] + [17, 31, 73, 47, 23]
     lst = list(range(n))
@@ -32,53 +30,17 @@ def knot_hash(s, n=256):
         s += f'{h:08b}'
     return s.replace('0', '.').replace('1', '#')
 
-def defrag(inp):
-    ss = []
+def defrag_count(inp):
+    n = 0
     inp = inp.strip()
     for i in range(128):
         s = f'{inp}-{i}'
         kh = knot_hash(s)
-        ss.append(kh)
-    return ss
+        n += kh.count('#')
+    return n
 
-def walk(ss, r, c):
-    island = set()
-    futures = deque()
-    futures.append((r, c))
-    while futures:
-        r, c = futures.popleft()
-        island.add((r, c))
-        for r2, c2 in [ (r-1, c), (r+1, c), (r, c+1), (r, c-1) ]:
-            if r2 < 0 or len(ss) <= r2 or c2 < 0 or len(ss[r2]) <= c2:
-                continue
-            if (r2, c2) in island:
-                continue
-            if ss[r2][c2] == '#':
-                futures.append((r2, c2))
-    return island
-
-def count_islands(ss):
-    all_islands = set()
-    num_islands = 0
-    for row, line in enumerate(ss):
-        for col, ch in enumerate(line):
-            if ch != '#':
-                continue
-            if (row, col) in all_islands:
-                continue
-            island = walk(ss, row, col)
-            if island:
-                num_islands += 1
-                #print(island)
-                all_islands.update(island)
-    return num_islands
-
-example_input = """
-flqrgnkx
-"""
-
-assert (got := count_islands(defrag(example_input)) == 1242), got
+assert (got := defrag_count('flqrgnkx')) == 8108, got
 
 with open('inputs/day14.input.txt') as f:
     real_input = f.read()
-print(count_islands(defrag(real_input))) # => 1141
+print(defrag_count(real_input)) # => 8194
