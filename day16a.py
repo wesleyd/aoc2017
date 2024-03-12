@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import re
+
 example_input = """
 s1,x3/4,pe/b
 """
@@ -34,5 +36,5 @@ assert (got := dance(example_steps, 5)) == 'baedc', got
 
 with open('inputs/day16.input.txt') as f:
     real_input = f.read()
-print(dance(parse(real_input))) => 'olgejankfhbmpidc'
+print(dance(parse(real_input))) # => 'olgejankfhbmpidc'
 
